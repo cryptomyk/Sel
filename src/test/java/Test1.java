@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -16,89 +17,66 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
+
 public class Test1  {
-	   private static ExtentTest test;
-	    private static ExtentTest scenario;
-	    private static ExtentTest step;
-	    private static ExtentReports extent;
-	    private static String extentReport, reportFolder, reportPath;
-	    
-	    private static ThreadLocal<ExtentTest> threadLocalFeatureTest = new ThreadLocal<ExtentTest>();
-	    private static ThreadLocal<ExtentTest> threadLocalScenarioTest = new ThreadLocal<ExtentTest>();
-	    private static ThreadLocal<ExtentTest> threadLocalStepTest = new ThreadLocal<ExtentTest>();
-	@BeforeClass
-	public static void startTest()
-	{
-		 ExtentSparkReporter extentSparkReporter;
-         String date = new SimpleDateFormat("MMM-dd_HH-mm").format(new Date());
-         reportPath = "reports/extent";
-         reportFolder = reportPath + "/" + "TEST" + "_" + date;
-         extentReport = reportFolder + "/" + "TEST" + "_Report_" + date + ".html";
-         extentSparkReporter = new ExtentSparkReporter(extentReport);
-         extentSparkReporter.config().setReportName("TEST");
-         extentSparkReporter.config().setDocumentTitle("TEST");
-         extentSparkReporter.config().setTheme(Theme.STANDARD);
-         extentSparkReporter.config().setEncoding("utf-8");
-         extent = new ExtentReports();
-         extent.attachReporter(extentSparkReporter);
+	  
+	static ExtentReports report = new ExtentReports();
+	static	 ExtentSparkReporter extentSparkReporter= new ExtentSparkReporter("reports/extent/index.html");
+	ExtentReports extent;
+	ExtentTest logger;
+
+	
+	
+	public void startReport(){
+		//ExtentReports(String filePath,Boolean replaceExisting) 
+		//filepath - path of the file, in .htm or .html format - path where your report needs to generate. 
+		//replaceExisting - Setting to overwrite (TRUE) the existing file or append to it
+		//True (default): the file will be replaced with brand new markup, and all existing data will be lost. Use this option to create a brand new report
+		//False: existing data will remain, new tests will be appended to the existing report. If the the supplied path does not exist, a new file will be created.
+		extent = new ExtentReports ();
+		//extent.addSystemInfo("Environment","Environment Name")
+		
+              extent.attachReporter(extentSparkReporter);
 	}
-	   public static synchronized void reportStep(int status, String desc) {
-	        try {
-	            switch (status) {
-	                case 1:
-	                    threadLocalStepTest.get().log(Status.PASS, desc);
-	                    break;
-	                case 2:
-	                    threadLocalStepTest.get().log(Status.WARNING, desc);
-	                    break;
-	                case 3:
-	                    threadLocalStepTest.get().log(Status.INFO, desc);
-	                    break;
-	                case 4:
-	                    threadLocalStepTest.get().log(Status.SKIP, desc);
-	                    break;
-	                case 5:
-	                    threadLocalStepTest.get().log(Status.FATAL, desc);
-	                    Assert.fail(desc);
-	                    break;
-	                case 6:
-	                    threadLocalStepTest.get().log(Status.FAIL, desc);
-	                    Assert.fail(desc);
-	                    break;
-	                case 7:
-	                    threadLocalStepTest.get().log(Status.ERROR, desc);
-	                    Assert.fail(desc);
-	                    break;
-	                case 8:
-	                    threadLocalStepTest.get().log(Status.FAIL, desc);
-	                    break;
-	                default:
-	                    threadLocalStepTest.get().fail("Status '" + status + "' not implemented");
-	                    Assert.fail("Status '" + status + "' not implemented");
-	                    break;
-	            }
-	        } catch (Exception e) {
-	           reportStep(7, e.toString());
-	        }
-	    }
-
-
+		
+	//@Test
+	public void info(){
+		//extent.startTest("TestCaseName", "Description")
+		//TestCaseName – Name of the test
+		//Description – Description of the test
+		//Starting test
+		
+		Assert.assertTrue(true);
+		//To generate the log when the test case is passed
+		
+	}
+	
+	
+	 
 		@Test
-		public void test1() throws InterruptedException {
+		public  void test1() throws InterruptedException {
+			extent = new ExtentReports ();
+			//extent.addSystemInfo("Environment","Environment Name")
+			
+	              
+			
 			System.setProperty("webdriver.chrome.driver","C:\\Users\\minbal521\\Documents\\Chrome driver\\chromedriver.exe");
 			WebDriver driver = new ChromeDriver();
 		
 			driver.get("https://google.com");
 			System.out.println("In google.com");
-			reportStep(3,"After moving to google.com");
+			logger = extent.createTest("Test1");
+			logger.log(Status.INFO,"In google.com");
 			driver.findElement(By.name("q")).sendKeys("java");
 			System.out.println("Entering java");
-			reportStep(3,"After Entering java");
+			logger.log(Status.INFO,"Entering java");
 			driver.findElement(By.name("q")).sendKeys(Keys.ENTER);
 			System.out.println("pressing enter key");
-			reportStep(3,"After pressing enter key");
+			logger.log(Status.INFO,"pressing enter key");
+			extent.attachReporter(extentSparkReporter);
+			extent.flush();
 			Thread.sleep(2000);
-			 extent.flush();
+			
 			driver.quit();
 			
 		}
