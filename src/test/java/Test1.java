@@ -79,7 +79,7 @@ public class Test1  {
 			System.out.println("pressing enter key");
 			logger.log(Status.INFO,"pressing enter key");
 			
-			if (driver.getTitle().equals("java - Google Search1")){
+			if (driver.getTitle().equals("java - Google Search")){
 				config.passData("pressing enter key",  3, 1);
 				config.passData("PASS",  3, 2);}
 				
