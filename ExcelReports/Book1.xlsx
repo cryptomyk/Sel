@@ -1,1 +1,5 @@
 
+Commands	Action	Result
+In google	Moved to google.com successfully	PASS
+Entering java	Entering java	PASS
+Pressing enter	not pressing enter key	FAIL
