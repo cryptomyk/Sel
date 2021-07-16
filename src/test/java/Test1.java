@@ -22,9 +22,9 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 
 
 public class Test1  {
-	  
+	   private static String extentReport, reportFolder, reportPath;
 	static ExtentReports report = new ExtentReports();
-	static	 ExtentSparkReporter extentSparkReporter= new ExtentSparkReporter("reports/extent/index.html");
+	static	 ExtentSparkReporter extentSparkReporter= new ExtentSparkReporter("result/index.html");
 	ExtentReports extent;
 	ExtentTest logger;
 	ExcelConfig config;
